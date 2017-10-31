@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 /**
@@ -57,8 +59,13 @@ public class ClosestPairFinder {
 		}
 		else {
 			if(pointArray[0].getDimension()==2) {
+				Point[] pointsY = new Point[pointArray.length];
+				for(int i=0;i<pointArray.length;i++) {
+					pointsY[i] = pointArray[i];
+				}
 				Arrays.sort(pointArray, new PointXComparator());
-				divideAndConquer(pointArray,pointCount);
+				Arrays.sort(pointsY,new PointYComparator());
+				divideAndConquer(pointArray,pointsY,pointCount);
 				writeToFile(closest.getClosestPair());
 				return closest.getClosestPair();
 			}
@@ -103,7 +110,7 @@ public class ClosestPairFinder {
 	 * @param pointCount
 	 * @return
 	 */
-	public double divideAndConquer(Point[] points,int pointCount) {
+	public double divideAndConquer(Point[] points,Point[] pointsY,int pointCount) {
 		if(pointCount<=3) {
 			return findPairBruteForce(points,pointCount).getDistance();
 		}
@@ -115,10 +122,24 @@ public class ClosestPairFinder {
 		for (int i = 0; i < rightHalve.length; i++) {
 			rightHalve[i] = points[i+mid];
 		}
+
+		// Divide points in y sorted array around the vertical line.
+		List<Point> yl = new ArrayList<>();
+		List<Point> yr = new ArrayList<>();
+
+	    for (int i = 0; i < pointCount; i++)
+	    {
+	      if (pointsY[i].getCoordinates()[0] <= midPoint.getCoordinates()[0])
+	    	  yl.add(pointsY[i]);
+	      else
+	    	  yr.add(pointsY[i]);
+	    }
+	    Point[] Pyl = yl.toArray(new Point[0]);
+	    Point[] Pyr = yr.toArray(new Point[0]);
 		//Think the vertical line which is going over middle point.
 		//dl is minimum distance on left of vertical line and dr is minimum distance on right of vertical line.
-		double dl = divideAndConquer(points,mid);
-		double dr = divideAndConquer(rightHalve,pointCount-mid);
+		double dl = divideAndConquer(points,Pyl,Pyl.length);
+		double dr = divideAndConquer(rightHalve,Pyr,Pyr.length);
 		double d = Math.min(dl, dr);
 		
 		//Create an array strip to hold points which are closer than d to vertical line
@@ -227,6 +248,7 @@ public class ClosestPairFinder {
 		PrintWriter writer = new PrintWriter("./output/sample_output_"+pair.getPoint1().getDimension()+"_"+pointCount+".txt","UTF-8");
 		StringBuilder builder1 = new StringBuilder();
 		StringBuilder builder2 = new StringBuilder();
+		
 		for(int i=0;i<pair.getPoint1().getDimension();i++) {
 			builder1.append(Math.round(pair.getPoint1().getCoordinates()[i]));
 			builder1.append("\t");
