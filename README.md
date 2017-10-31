@@ -19,24 +19,22 @@ For 2D points Divide and Conquer algorithm is implemented to obtain a better tim
 This algorithm basically checks every pair of points using two nested for loops and determines the closest pair via Euclidean distance formula.
 
 ## Divide And Conquer
-We partition S into S1, S2 by vertical line defined by median x-coordinate in S. To sort points according to x and y coordinates Comparator interface is used.
+We partition S into S1, S2 by vertical line defined by median x-coordinate in S. Sort points according to y-coordinate. To sort points according to x and y coordinates Comparator interface is used.
 Recursively compute closest pair distances δ1 and δ2. Set δ = min(δ1, δ2). Now compute the closest pair with one point each in S1 and S2.
 In each candidate pair (p, q), where p ∈ S1 and q ∈ S2, the points p, q must both lie within δ of vertical line.
 Consider a point p ∈ S1. All points of S2 within distance δ of p must lie in a δ × 2δ rectangle R.
 Build an array *strip* of all such points.
-Sort the array *strip* according to y coordinates
 Find the smallest distance in *strip*.
 Return the minimum of d and closest distance in strip.
 
 # Complexity
 Brute Force algorithm takes O(n^2) time due to nested for loops.
-Divide and Conquer algorithm divides all points in two sets and recursively calls for two sets. After dividing, it finds the strip in O(n) time, sorts the strip in O(nLogn) time and finally finds the closest points in strip in O(n) time.
-Let time complexity of this algorithm be T(n). 
+Divide and Conquer algorithm divides all points in two sets and recursively calls for two sets. After dividing, it finds the strip in O(n) time. Also, it takes O(n) time to divide the Py array around the mid vertical line. Finally finds the closest points in strip in O(n) time. So T(n) can expressed as follows. 
 
-    T(n) = 2T(n/2) + O(n) + O(nLogn) + O(n)
-    T(n) = 2T(n/2) + O(nLogn)
-    T(n) = T(n x Logn x Logn)
-Therefore, this algorithm takes O(n(Logn)^2) time for 2D.
+    T(n) = 2T(n/2) + O(n) + O(n) + O(n)
+    T(n) = 2T(n/2) + O(n)
+    T(n) = T(nLogn)
+Therefore, this algorithm takes O(n(Logn) time.
 
 # Tests
 JUnit test case is implemented to check whether the expected outputs are taken according to given inputs. Numerous tests are undertaken for five given input files which contain different number of points with various dimensions. The output files obtained from tests are aligned with the given sample output files.
