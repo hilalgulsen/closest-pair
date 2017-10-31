@@ -7,8 +7,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 /**
  * The ClosestPairFinder class is main class.Reading points from file,
@@ -249,10 +251,25 @@ public class ClosestPairFinder {
 		StringBuilder builder2 = new StringBuilder();
 		
 		for(int i=0;i<pair.getPoint1().getDimension();i++) {
-			builder1.append(Math.round(pair.getPoint1().getCoordinates()[i]));
-			builder1.append("\t");
-			builder2.append(Math.round(pair.getPoint2().getCoordinates()[i]));
-			builder2.append("\t");
+			double coord1 = notation(pair.getPoint1().getCoordinates()[i]);
+			double coord2 = notation(pair.getPoint2().getCoordinates()[i]);
+			
+			if(coord1%1==0) {
+				builder1.append((int) coord1);
+				builder1.append("\t");
+			}
+			else {
+				builder1.append(coord1);
+				builder1.append("\t");
+			}
+			if(coord2%1==0) {
+				builder2.append((int) coord2);
+				builder2.append("\t");
+			}
+			else {
+				builder2.append(coord2);
+				builder2.append("\t");
+			}
 		}
 		int lineNumber1 = pair.getPoint1().getLineNumber();
 		int lineNumber2 = pair.getPoint2().getLineNumber();
@@ -265,5 +282,61 @@ public class ClosestPairFinder {
 			writer.println(lineNumber1+":"+builder1.toString());
 		}
 		writer.close();
+	}
+	public static double notation(double num) {
+		int decimal = (int) num;
+		double fraction = Math.abs(num - decimal);
+		int digitLength = String.valueOf(Math.abs(decimal)).length();
+		int indicatorPlace = 7 - digitLength;
+		int indicator = (int)(Math.abs(fraction) * Math.pow(10,indicatorPlace)) % 10;
+		double result;
+		int roundingPoint = 7-digitLength-1;
+		if(indicator>=5) {
+			if(7-digitLength-1>0) {
+				//fraction += Math.pow(10, -roundingPoint);
+				String fractionDigit = String.join("", Collections.nCopies(roundingPoint, "#"));
+				String dFormat = "#." + fractionDigit;
+				DecimalFormat df = new DecimalFormat(dFormat);
+				String f = df.format(fraction).replace(',', '.');
+				double newFraction = Double.parseDouble(f);
+				
+				if(num<0) {
+					result = decimal - newFraction;
+				}
+				else {
+					result = decimal + newFraction;
+				}
+			}
+			else if (7-digitLength-1 ==0){
+				if(num<0) {
+					result = decimal - 1;
+				}
+				else {
+					result = decimal + 1;
+				}
+			}
+			else {
+				result = decimal;
+			}
+		}
+		else {
+			if(7-digitLength-1>0) {
+				String fractionDigit = String.join("", Collections.nCopies(roundingPoint, "#"));
+				String dFormat = "#." + fractionDigit;
+				DecimalFormat df = new DecimalFormat(dFormat);
+				String f = df.format(fraction).replace(',', '.');
+				double newFraction = Double.parseDouble(f);
+				if(num<0) {
+					result = decimal - newFraction;
+				}
+				else {
+					result = decimal + newFraction;
+				}
+			}
+			else {
+				result = decimal;
+			}
+		}
+		return result;
 	}
 }
