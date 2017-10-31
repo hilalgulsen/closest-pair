@@ -167,7 +167,6 @@ public class ClosestPairFinder {
 	public double closestStrip(Point strip[], int size, double d)
 	{
 	    double min = d;
-	    Arrays.sort(strip,new PointYComparator());
 
 	    for (int i = 0; i < size; ++i) {
 	    	for (int j = i+1; j < size && (strip[j].getCoordinates()[1] - strip[i].getCoordinates()[1]) < min; ++j) {
