@@ -8,6 +8,9 @@ Input files should be under input folder. Name of input file should be passed by
 
 Program produces output file under output folder. It is named as **sample_output_dimension_numberOfPoints.txt**.
 
+    If there are less than 2 points in input file, program outputs "There are no more points to pair" message.
+    If file is not in right directory, program outputs "File was not found under input folder" message.
+
 # Solution of the Problem
 First of all, the file is read to extract the number of points along with the information about the dimension and the line numbers. These information is kept as a *Point class*. Note that, number of points and the dimension info can be obtained from the name of the files for this particular task. However, the name of the given files might be arbitrary. Therefore, aformentioned info is extracted by reading the file. 
 For 2D points Divide and Conquer algorithm is implemented to obtain a better time complexity. For higher dimensional points, Brute Force algorithm is applied. 
@@ -29,9 +32,10 @@ Return the minimum of d and closest distance in strip.
 Brute Force algorithm takes O(n^2) time due to nested for loops.
 Divide and Conquer algorithm divides all points in two sets and recursively calls for two sets. After dividing, it finds the strip in O(n) time, sorts the strip in O(nLogn) time and finally finds the closest points in strip in O(n) time.
 Let time complexity of this algorithm be T(n). 
-T(n) = 2T(n/2) + O(n) + O(nLogn) + O(n)
-T(n) = 2T(n/2) + O(nLogn)
-T(n) = T(n x Logn x Logn)
+
+    T(n) = 2T(n/2) + O(n) + O(nLogn) + O(n)
+    T(n) = 2T(n/2) + O(nLogn)
+    T(n) = T(n x Logn x Logn)
 Therefore, this algorithm takes O(n(Logn)^2) time for 2D.
 
 # Tests
