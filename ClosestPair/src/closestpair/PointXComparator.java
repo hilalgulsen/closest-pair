@@ -3,7 +3,9 @@ package closestpair;
 import java.util.Comparator;
 /**
  * The PointXComparator class compares points according to x coordinates using Comparator interface.
- * @author Hilal Gülþen
+ * @author Hilal Gulsen
+ * @version v1.0
+ * 30.10.2017
  */
 public class PointXComparator implements Comparator<Point>{
 

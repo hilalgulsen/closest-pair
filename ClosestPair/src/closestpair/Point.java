@@ -2,7 +2,9 @@ package closestpair;
 /**
  * The Point class holds dimension, coordinates and line number of points.
  * 
- * @author Hilal Gülþen
+ * @author Hilal Gulsen
+ * @version v1.0
+ * 30.10.2017
  */
 public class Point{
 	private int dimension;

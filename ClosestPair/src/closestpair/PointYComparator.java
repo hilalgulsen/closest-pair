@@ -3,7 +3,9 @@ package closestpair;
 import java.util.Comparator;
 /**
  * The PointYComparator class compares points according to y coordinates using Comparator interface.
- * @author Hilal Gülþen
+ * @author Hilal Gulsen
+ * @version v1.0
+ * 30.10.2017
  */
 public class PointYComparator implements Comparator<Point> {
 	

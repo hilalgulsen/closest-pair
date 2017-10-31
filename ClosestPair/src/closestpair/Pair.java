@@ -2,7 +2,9 @@ package closestpair;
 /**
  * The Pair class represents two points and their distance.
  * 
- * @author Hilal Gülþen
+ * @author Hilal Gulsen
+ * @version v1.0
+ * 30.10.2017
  */
 public class Pair {
 	private Point point1;

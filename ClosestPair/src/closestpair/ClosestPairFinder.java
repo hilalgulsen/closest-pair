@@ -13,7 +13,9 @@ import java.util.List;
  * finding closest pair of points, writing line numbers and coordinates
  * of closest pair to file are implemented in this class.
  * 
- * @author Hilal Gülþen
+ * @author Hilal Gulsen
+ * @version v1.0
+ * 30.10.2017
  */
 public class ClosestPairFinder {
 	/**Number of points in input file */
@@ -27,7 +29,10 @@ public class ClosestPairFinder {
 	 */
 	public static void main(String[] args) throws IOException{
 		ClosestPairFinder finder = new ClosestPairFinder();
+		final long startTime = System.currentTimeMillis();				//start time of system.
 		finder.compute(args[0]);
+		final long totalTime = System.currentTimeMillis() - startTime; 	//end time of system.
+		System.out.println("Running time of system : " + totalTime + " milliseconds");
 	}
 	
 	/**
@@ -42,17 +47,28 @@ public class ClosestPairFinder {
 	public Pair compute(String fileName) throws IOException{
 		ClosestPair closest = new ClosestPair();
 		Point[] pointArray = readFromFile(fileName);
-		if(pointArray[0].getDimension()==2) {
-			Arrays.sort(pointArray, new PointXComparator());
-			divideAndConquer(pointArray,pointCount);
-			writeToFile(closest.getClosestPair());
-			return closest.getClosestPair();
+		if(pointArray.length<2) {	//If there are less than two points, it outputs message to console
+			if(pointArray[0].getDimension()!=0) {
+				System.out.println("There are no more points to pair");
+			}
+			Pair err = new Pair();
+			err.setDistance(-1);
+			return err;
 		}
 		else {
-			Pair pair = findPairBruteForce(pointArray,pointCount);
-			writeToFile(pair);
-			return pair;
+			if(pointArray[0].getDimension()==2) {
+				Arrays.sort(pointArray, new PointXComparator());
+				divideAndConquer(pointArray,pointCount);
+				writeToFile(closest.getClosestPair());
+				return closest.getClosestPair();
+			}
+			else {
+				Pair pair = findPairBruteForce(pointArray,pointCount);
+				writeToFile(pair);
+				return pair;
+			}
 		}
+
 	}
 	
 	/**
@@ -164,30 +180,40 @@ public class ClosestPairFinder {
 	 */
 	public Point[] readFromFile(String fileName) throws IOException {
 		File file = new File("./input/"+fileName);
-		List<String> lines = Files.readAllLines(file.toPath());
-		pointCount = lines.size();
-		int lineNumber = 1;
-		int numberOfPoints = lines.size();
-		Point[] points = new Point[numberOfPoints];
-		String row = lines.get(0);
-		String[] rowCoordinates = row.split("\t");
-		int dimension = rowCoordinates.length;
-		for(String line:lines) {
-			Point point = new Point();
-			String[] coordinates = line.split("\t");
-			Double[] fCoordinates = new Double[dimension];
-			int index = 0;
-			for(String coordinate:coordinates) {
-				fCoordinates[index] = Double.parseDouble(coordinate);
-				index++;
+		if(file.exists() && !file.isDirectory()) {
+			List<String> lines = Files.readAllLines(file.toPath());
+			pointCount = lines.size();
+			int lineNumber = 1;
+			int numberOfPoints = lines.size();
+			Point[] points = new Point[numberOfPoints];
+			String row = lines.get(0);
+			String[] rowCoordinates = row.split("\t");
+			int dimension = rowCoordinates.length;
+			for(String line:lines) {
+				Point point = new Point();
+				String[] coordinates = line.split("\t");
+				Double[] fCoordinates = new Double[dimension];
+				int index = 0;
+				for(String coordinate:coordinates) {
+					fCoordinates[index] = Double.parseDouble(coordinate);
+					index++;
+				}
+				point.setLineNumber(lineNumber);
+				point.setCoordinates(fCoordinates);
+				point.setDimension(dimension);
+				lineNumber++;
+				points[lineNumber-2] = point;
 			}
-			point.setLineNumber(lineNumber);
-			point.setCoordinates(fCoordinates);
-			point.setDimension(dimension);
-			lineNumber++;
-			points[lineNumber-2] = point;
+			return points;
 		}
-		return points;
+		else {
+			System.out.println("File was not found under input folder");
+			Point[] err = new Point[1];
+			err[0] = new Point();
+			err[0].setDimension(0);
+			return err;
+		}
+
 	}
 	
 	/**

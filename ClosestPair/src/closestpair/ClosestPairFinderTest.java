@@ -11,7 +11,9 @@ import org.junit.Test;
  * The ClosestPairFinderTest class includes unit tests.
  * It is checked whether the expected outputs are taken according to given input files.
  * 
- * @author Hilal Gülþen
+ * @author Hilal Gulsen
+ * @version v1.0
+ * 30.10.2017
  */
 public class ClosestPairFinderTest {
 	ClosestPairFinder finder = new ClosestPairFinder();
